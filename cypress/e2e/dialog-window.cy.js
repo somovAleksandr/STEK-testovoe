@@ -53,6 +53,24 @@ describe("dialog window", () => {
     getSaveButton().should("be.enabled").click();
     cy.wait("@createKvpl").its("response.statusCode").should("eq", 200);
 
-    // cleanup()
+    cleanup(disctrictName);
+  });
+
+  // Дальше решил писать название itов по-русски
+
+  it("Проверка обязательных полей", () => {
+    getSaveButton().click();
+    cy.contains("div", "Поле не может быть пустым").should("be.visible");
+    getSaveButton().should("be.disabled");
+    getDistrictName().should("be.visible").type(disctrictName);
+    cy.contains("div", "Поле не может быть пустым").should("not.exist");
+    getSaveButton().should("be.enabled");
+
+    getNumberInList().focus().clear();
+    cy.contains("div", "Поле не может быть пустым").should("be.visible");
+    getSaveButton().should("be.disabled");
+    getNumberInList().focus().type(numberInList);
+    cy.contains("div", "Поле не может быть пустым").should("not.exist");
+    getSaveButton().should("be.enabled");
   });
 });
